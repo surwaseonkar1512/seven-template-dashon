@@ -17,7 +17,8 @@ import {
   Award,
   Sparkles,
 } from "lucide-react";
-import { toast } from "sonner@2.0.3";
+import { toast } from "sonner";
+import { passwordLogin, sendLoginOtp } from "../../Services/LoginServices";
 
 interface LoginPageProps {
   onLoginSuccess: () => void;
@@ -85,13 +86,30 @@ export function LoginPage({
     }
 
     setIsPasswordLoading(true);
+    try {
+      const response = await passwordLogin(
+        passwordForm.email,
+        passwordForm.password
+      );
 
-    // Simulate API call
-    setTimeout(() => {
+      // Example expected structure: { success: true, token: "..." }
+      if (response?.token) {
+        toast.success("Login successful!");
+        localStorage.setItem("token", response.token);
+        onLoginSuccess();
+      } else {
+        toast.error(response?.message || "Invalid credentials");
+      }
+    } catch (error: any) {
+      // If backend returns error
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Invalid email or password";
+      toast.error(message);
+    } finally {
       setIsPasswordLoading(false);
-      toast.success("Login successful!");
-      onLoginSuccess();
-    }, 1500);
+    }
   };
 
   // OTP Login Handlers
@@ -106,6 +124,7 @@ export function LoginPage({
   const handleSendOTP = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validate email
     const emailError = validateEmail(otpForm.email);
     if (emailError) {
       setOtpErrors({ email: emailError });
@@ -114,13 +133,26 @@ export function LoginPage({
     }
 
     setIsOtpLoading(true);
+    try {
+      const response: any = await sendLoginOtp(otpForm.email);
+      console.log("response", response);
 
-    // Simulate sending OTP
-    setTimeout(() => {
+      if (response?.message === "Login OTP sent") {
+        setShowOTPModal(true);
+        toast.success(response?.message || "OTP sent to your email!");
+      } else {
+        toast.error(response?.message || "Failed to send OTP");
+      }
+    } catch (error: any) {
+      console.error("Error sending OTP:", error);
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Something went wrong while sending OTP";
+      toast.error(message);
+    } finally {
       setIsOtpLoading(false);
-      setShowOTPModal(true);
-      toast.success("OTP sent to your email!");
-    }, 1500);
+    }
   };
 
   const handleOTPVerify = async (otp: string) => {
@@ -425,7 +457,7 @@ export function LoginPage({
             </Tabs>
 
             {/* Sign Up Link */}
-            <div className="mt-6 text-center">
+            {/* <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
                 <button
@@ -436,7 +468,7 @@ export function LoginPage({
                   Sign up here
                 </button>
               </p>
-            </div>
+            </div> */}
           </div>
 
           {/* Footer */}

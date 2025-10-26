@@ -1,28 +1,46 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { OTPVerificationModal } from './OTPVerificationModal';
-import { User, Mail, Phone, Lock, Globe, Upload, Eye, EyeOff, CheckCircle2, AlertCircle, GraduationCap, Zap, Shield, Clock } from 'lucide-react';
-import { toast } from 'sonner@2.0.3';
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import { OTPVerificationModal } from "./OTPVerificationModal";
+import {
+  User,
+  Mail,
+  Phone,
+  Lock,
+  Globe,
+  Upload,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  AlertCircle,
+  GraduationCap,
+  Zap,
+  Shield,
+  Clock,
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface SignupPageProps {
   onSignupSuccess: () => void;
   onSwitchToLogin: () => void;
 }
 
-export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps) {
+export function SignupPage({
+  onSignupSuccess,
+  onSwitchToLogin,
+}: SignupPageProps) {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    mobile: '',
-    password: '',
-    confirmPassword: '',
-    domainUrl: ''
+    name: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+    domainUrl: "",
   });
-  
+
   const [avatar, setAvatar] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string>('');
+  const [avatarPreview, setAvatarPreview] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -31,31 +49,42 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
-      case 'name':
-        return value.trim().length < 3 ? 'Name must be at least 3 characters' : '';
-      case 'email':
-        return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? 'Invalid email address' : '';
-      case 'mobile':
-        return !/^[0-9]{10}$/.test(value.replace(/[^0-9]/g, '')) ? 'Mobile number must be 10 digits' : '';
-      case 'password':
-        return value.length < 8 ? 'Password must be at least 8 characters' : 
-               !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value) ? 'Password must contain uppercase, lowercase, and number' : '';
-      case 'confirmPassword':
-        return value !== formData.password ? 'Passwords do not match' : '';
-      case 'domainUrl':
-        return !/^[a-z0-9-]+$/.test(value) ? 'Only lowercase letters, numbers, and hyphens allowed' : '';
+      case "name":
+        return value.trim().length < 3
+          ? "Name must be at least 3 characters"
+          : "";
+      case "email":
+        return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          ? "Invalid email address"
+          : "";
+      case "mobile":
+        return !/^[0-9]{10}$/.test(value.replace(/[^0-9]/g, ""))
+          ? "Mobile number must be 10 digits"
+          : "";
+      case "password":
+        return value.length < 8
+          ? "Password must be at least 8 characters"
+          : !/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)
+          ? "Password must contain uppercase, lowercase, and number"
+          : "";
+      case "confirmPassword":
+        return value !== formData.password ? "Passwords do not match" : "";
+      case "domainUrl":
+        return !/^[a-z0-9-]+$/.test(value)
+          ? "Only lowercase letters, numbers, and hyphens allowed"
+          : "";
       default:
-        return '';
+        return "";
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
@@ -63,7 +92,7 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
     const { name, value } = e.target;
     const error = validateField(name, value);
     if (error) {
-      setErrors(prev => ({ ...prev, [name]: error }));
+      setErrors((prev) => ({ ...prev, [name]: error }));
     }
   };
 
@@ -71,12 +100,12 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        toast.error('File size must be less than 2MB');
+        toast.error("File size must be less than 2MB");
         return;
       }
-      
+
       if (!file.type.match(/^image\/(jpg|jpeg|png)$/)) {
-        toast.error('Only JPG, JPEG, and PNG files are allowed');
+        toast.error("Only JPG, JPEG, and PNG files are allowed");
         return;
       }
 
@@ -91,41 +120,41 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate all fields
     const newErrors: Record<string, string> = {};
-    Object.keys(formData).forEach(key => {
+    Object.keys(formData).forEach((key) => {
       const error = validateField(key, formData[key as keyof typeof formData]);
       if (error) newErrors[key] = error;
     });
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      toast.error('Please fix all errors before submitting');
+      toast.error("Please fix all errors before submitting");
       return;
     }
 
     setIsLoading(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
       setShowOTPModal(true);
-      toast.success('OTP sent to your email!');
+      toast.success("OTP sent to your email!");
     }, 1500);
   };
 
   const handleOTPVerify = async (otp: string) => {
     // Simulate OTP verification
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     setShowOTPModal(false);
-    toast.success('Account created successfully!');
+    toast.success("Account created successfully!");
     onSignupSuccess();
   };
 
   const handleResendOTP = () => {
     // Simulate resending OTP
-    console.log('Resending OTP...');
+    console.log("Resending OTP...");
   };
 
   return (
@@ -133,15 +162,21 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-20 w-72 h-72 bg-purple-400/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div
+          className="absolute bottom-20 right-20 w-96 h-96 bg-pink-400/20 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "1s" }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-400/10 rounded-full blur-3xl animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
       </div>
 
       {/* Left Side - Branding & Features */}
       <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-center items-center p-12 text-white">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-rose-700" />
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDM0djItaDJ2LTJoLTJ6bTAtNHYyaDJ2LTJoLTJ6bTAtNHYyaDJ2LTJoLTJ6bTAtNHYyaDJ2LTJoLTJ6bTAtNHYyaDJ2LTJoLTJ6bTQgMTZ2Mmgydi0yaC0yem00LTR2Mmgydi0yaC0yem00LTR2Mmgydi0yaC0yem00LTR2Mmgydi0yaC0yem00LTR2Mmgydi0yaC0yem0tMTYgMHYyaDJ2LTJoLTJ6bS00IDB2Mmgydi0yaC0yem0tNCAwdjJoMnYtMmgtMnptLTQgMHYyaDJ2LTJoLTJ6bS00IDB2Mmgydi0yaC0yem0wIDR2Mmgydi0yaC0yem0wIDR2Mmgydi0yaC0yem0wIDR2Mmgydi0yaC0yem0wIDR2Mmgydi0yaC0yem00IDB2Mmgydi0yaC0yem00IDB2Mmgydi0yaC0yem00IDB2Mmgydi0yaC0yem00IDB2Mmgydi0yaC0yem00LTEydjJoMnYtMmgtMnptMC00djJoMnYtMmgtMnptMC00djJoMnYtMmgtMnptMC00djJoMnYtMmgtMnoiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-30" />
-        
+
         <div className="relative z-10 max-w-lg space-y-8 animate-in fade-in slide-in-from-left duration-700">
           {/* Logo */}
           <div className="flex items-center space-x-3">
@@ -163,18 +198,31 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
               </span>
             </h2>
             <p className="text-xl text-purple-100 leading-relaxed">
-              Join thousands of successful coaching institutes already using CoachPro
+              Join thousands of successful coaching institutes already using
+              CoachPro
             </p>
           </div>
 
           {/* Benefits */}
           <div className="space-y-4 pt-4">
             {[
-              { icon: Zap, title: 'Quick Setup', desc: 'Get your website live in under 10 minutes' },
-              { icon: Shield, title: 'Secure & Reliable', desc: '99.9% uptime with enterprise security' },
-              { icon: Clock, title: '24/7 Support', desc: 'Expert help whenever you need it' }
+              {
+                icon: Zap,
+                title: "Quick Setup",
+                desc: "Get your website live in under 10 minutes",
+              },
+              {
+                icon: Shield,
+                title: "Secure & Reliable",
+                desc: "99.9% uptime with enterprise security",
+              },
+              {
+                icon: Clock,
+                title: "24/7 Support",
+                desc: "Expert help whenever you need it",
+              },
             ].map((benefit, index) => (
-              <div 
+              <div
                 key={index}
                 className="flex items-start space-x-4 p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-300 animate-in slide-in-from-left"
                 style={{ animationDelay: `${(index + 1) * 150}ms` }}
@@ -193,11 +241,11 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 pt-4">
             {[
-              { value: '500+', label: 'Institutes' },
-              { value: '10K+', label: 'Students' },
-              { value: '4.9★', label: 'Rating' }
+              { value: "500+", label: "Institutes" },
+              { value: "10K+", label: "Students" },
+              { value: "4.9★", label: "Rating" },
             ].map((stat, index) => (
-              <div 
+              <div
                 key={index}
                 className="text-center p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20"
               >
@@ -240,13 +288,17 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                 <div className="relative group">
                   <div className="h-24 w-24 rounded-full bg-gradient-to-br from-purple-100 to-pink-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg group-hover:shadow-xl transition-all">
                     {avatarPreview ? (
-                      <img src={avatarPreview} alt="Avatar preview" className="h-full w-full object-cover" />
+                      <img
+                        src={avatarPreview}
+                        alt="Avatar preview"
+                        className="h-full w-full object-cover"
+                      />
                     ) : (
                       <Upload className="h-10 w-10 text-purple-400" />
                     )}
                   </div>
-                  <label 
-                    htmlFor="avatar-upload" 
+                  <label
+                    htmlFor="avatar-upload"
                     className="absolute bottom-0 right-0 h-9 w-9 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg"
                   >
                     <Upload className="h-4 w-4 text-white" />
@@ -259,7 +311,9 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                     className="hidden"
                   />
                 </div>
-                <p className="text-xs text-gray-500">Upload profile picture (JPG, PNG, max 2MB)</p>
+                <p className="text-xs text-gray-500">
+                  Upload profile picture (JPG, PNG, max 2MB)
+                </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -278,7 +332,9 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`pl-11 h-11 bg-gray-50/50 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all ${
-                        errors.name ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                        errors.name
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
                       }`}
                     />
                   </div>
@@ -306,7 +362,9 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`pl-11 h-11 bg-gray-50/50 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all ${
-                        errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                        errors.email
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
                       }`}
                     />
                   </div>
@@ -334,7 +392,9 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`pl-11 h-11 bg-gray-50/50 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all ${
-                        errors.mobile ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                        errors.mobile
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
                       }`}
                     />
                   </div>
@@ -361,7 +421,9 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`pl-11 pr-40 h-11 bg-gray-50/50 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all ${
-                        errors.domainUrl ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                        errors.domainUrl
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
                       }`}
                     />
                     <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
@@ -386,13 +448,15 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                     <Input
                       id="password"
                       name="password"
-                      type={showPassword ? 'text' : 'password'}
+                      type={showPassword ? "text" : "password"}
                       placeholder="••••••••"
                       value={formData.password}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`pl-11 pr-11 h-11 bg-gray-50/50 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all ${
-                        errors.password ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                        errors.password
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
                       }`}
                     />
                     <button
@@ -400,7 +464,11 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                     >
-                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
                     </button>
                   </div>
                   {errors.password && (
@@ -421,21 +489,29 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                     <Input
                       id="confirmPassword"
                       name="confirmPassword"
-                      type={showConfirmPassword ? 'text' : 'password'}
+                      type={showConfirmPassword ? "text" : "password"}
                       placeholder="••••••••"
                       value={formData.confirmPassword}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={`pl-11 pr-11 h-11 bg-gray-50/50 border-gray-200 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all ${
-                        errors.confirmPassword ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                        errors.confirmPassword
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
                       }`}
                     />
                     <button
                       type="button"
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                     >
-                      {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
                     </button>
                   </div>
                   {errors.confirmPassword ? (
@@ -443,7 +519,8 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
                       <AlertCircle className="h-3 w-3" />
                       {errors.confirmPassword}
                     </div>
-                  ) : formData.confirmPassword && formData.password === formData.confirmPassword ? (
+                  ) : formData.confirmPassword &&
+                    formData.password === formData.confirmPassword ? (
                     <div className="flex items-center gap-1 text-xs text-green-600 animate-in slide-in-from-top-1">
                       <CheckCircle2 className="h-3 w-3" />
                       Passwords match
@@ -453,9 +530,9 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
               </div>
 
               {/* Submit Button */}
-              <Button 
-                type="submit" 
-                className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-[1.02] mt-6" 
+              <Button
+                type="submit"
+                className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 shadow-lg shadow-purple-500/30 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-[1.02] mt-6"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -474,7 +551,7 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
               {/* Login Link */}
               <div className="text-center">
                 <p className="text-sm text-gray-600">
-                  Already have an account?{' '}
+                  Already have an account?{" "}
                   <button
                     type="button"
                     onClick={onSwitchToLogin}
@@ -489,10 +566,14 @@ export function SignupPage({ onSignupSuccess, onSwitchToLogin }: SignupPageProps
 
           {/* Footer */}
           <p className="text-center text-sm text-gray-500">
-            By signing up, you agree to our{' '}
-            <a href="#" className="text-purple-600 hover:underline">Terms of Service</a>
-            {' '}and{' '}
-            <a href="#" className="text-purple-600 hover:underline">Privacy Policy</a>
+            By signing up, you agree to our{" "}
+            <a href="#" className="text-purple-600 hover:underline">
+              Terms of Service
+            </a>{" "}
+            and{" "}
+            <a href="#" className="text-purple-600 hover:underline">
+              Privacy Policy
+            </a>
           </p>
         </div>
       </div>

@@ -1,9 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './ui/dialog';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Mail, Clock, CheckCircle2 } from 'lucide-react';
-import { toast } from 'sonner@2.0.3';
+import { useState, useRef, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Mail, Clock, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
+import { verifyLoginOtp } from "../../Services/LoginServices";
 
 interface OTPVerificationModalProps {
   open: boolean;
@@ -11,7 +18,7 @@ interface OTPVerificationModalProps {
   email: string;
   onVerify: (otp: string) => void;
   onResend: () => void;
-  purpose?: 'signup' | 'login' | 'forgot-password';
+  purpose?: "signup" | "login" | "forgot-password";
 }
 
 export function OTPVerificationModal({
@@ -20,13 +27,13 @@ export function OTPVerificationModal({
   email,
   onVerify,
   onResend,
-  purpose = 'signup'
+  purpose = "signup",
 }: OTPVerificationModalProps) {
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const inputRefs = useRef<(HTMLInputElement | null | any)[]>([]);
 
   useEffect(() => {
     if (open && timer > 0) {
@@ -45,7 +52,7 @@ export function OTPVerificationModal({
 
   useEffect(() => {
     if (open) {
-      inputRefs.current[0]?.focus();
+      inputRefs?.current?.[0]?.focus();
     }
   }, [open]);
 
@@ -57,48 +64,51 @@ export function OTPVerificationModal({
     setOtp(newOtp);
 
     if (value && index < 5) {
-      inputRefs.current[index + 1]?.focus();
+      inputRefs?.current[index + 1]?.focus();
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (e.key === "Backspace" && !otp[index] && index > 0) {
+      inputRefs?.current[index - 1]?.focus();
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
-    const pastedData = e.clipboardData.getData('text').slice(0, 6);
+    const pastedData = e.clipboardData.getData("text").slice(0, 6);
     if (!/^\d+$/.test(pastedData)) return;
 
     const newOtp = [...otp];
-    pastedData.split('').forEach((char, index) => {
+    pastedData.split("").forEach((char, index) => {
       if (index < 6) newOtp[index] = char;
     });
     setOtp(newOtp);
-    
-    const nextEmptyIndex = newOtp.findIndex(val => !val);
+
+    const nextEmptyIndex = newOtp.findIndex((val) => !val);
     if (nextEmptyIndex !== -1) {
-      inputRefs.current[nextEmptyIndex]?.focus();
+      inputRefs?.current[nextEmptyIndex]?.focus();
     } else {
-      inputRefs.current[5]?.focus();
+      inputRefs?.current[5]?.focus();
     }
   };
 
   const handleVerify = async () => {
-    const otpString = otp.join('');
+    const otpString = otp.join("");
     if (otpString.length !== 6) {
-      toast.error('Please enter the complete OTP');
+      toast.error("Please enter the complete OTP");
       return;
     }
 
     setIsVerifying(true);
     try {
-      await onVerify(otpString);
-      toast.success('OTP verified successfully!');
+      await verifyLoginOtp(email, otpString);
+      toast.success("OTP verified successfully!");
     } catch (error) {
-      toast.error('Invalid OTP. Please try again.');
+      toast.error("Invalid OTP. Please try again.");
     } finally {
       setIsVerifying(false);
     }
@@ -106,25 +116,25 @@ export function OTPVerificationModal({
 
   const handleResendOTP = () => {
     if (!canResend) return;
-    
-    setOtp(['', '', '', '', '', '']);
+
+    setOtp(["", "", "", "", "", ""]);
     setTimer(60);
     setCanResend(false);
     onResend();
-    toast.success('OTP sent successfully!');
+    toast.success("OTP sent successfully!");
     inputRefs.current[0]?.focus();
   };
 
   const getPurposeText = () => {
     switch (purpose) {
-      case 'signup':
-        return 'Complete your signup';
-      case 'login':
-        return 'Verify your login';
-      case 'forgot-password':
-        return 'Reset your password';
+      case "signup":
+        return "Complete your signup";
+      case "login":
+        return "Verify your login";
+      case "forgot-password":
+        return "Reset your password";
       default:
-        return 'Verify your identity';
+        return "Verify your identity";
     }
   };
 
@@ -165,7 +175,9 @@ export function OTPVerificationModal({
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
             <Clock className="h-4 w-4" />
             {canResend ? (
-              <span className="text-foreground">You can resend the code now</span>
+              <span className="text-foreground">
+                You can resend the code now
+              </span>
             ) : (
               <span>Resend code in {timer}s</span>
             )}
@@ -174,7 +186,7 @@ export function OTPVerificationModal({
           {/* Verify Button */}
           <Button
             onClick={handleVerify}
-            disabled={otp.some(d => !d) || isVerifying}
+            disabled={otp.some((d) => !d) || isVerifying}
             className="w-full"
           >
             {isVerifying ? (

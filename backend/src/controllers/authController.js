@@ -126,7 +126,7 @@ exports.verifySignupOtp = async (req, res) => {
     await user.save();
 
     const token = signToken(user);
-    return res.json({ message: "Verified", token });
+    return res.json({ message: "Verified", token, user });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
@@ -159,7 +159,7 @@ exports.passwordLogin = async (req, res) => {
     }
 
     const token = signToken(user);
-    return res.json({ token });
+    return res.json({ token, user });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
@@ -332,17 +332,15 @@ exports.adminCreateUser = async (req, res) => {
     }
 
     await user.save();
-    return res
-      .status(201)
-      .json({
-        message: "User created by admin",
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        },
-      });
+    return res.status(201).json({
+      message: "User created by admin",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
