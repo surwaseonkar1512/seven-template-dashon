@@ -1,4 +1,3 @@
-// api/apiClient.js
 import axios from "axios";
 
 // const BASE_URL = "https://mafpco-corp-site.onrender.com/api";
@@ -10,11 +9,20 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
-//
-// Request interceptor (optional, for token injection)
+
+// ✅ Request interceptor for token injection
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  try {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const user = JSON.parse(storedUser); // 👈 Parse from JSON string
+      if (user?.token) {
+        config.headers.Authorization = `Bearer ${user.token}`;
+      }
+    }
+  } catch (error) {
+    console.error("Error parsing user token:", error);
+  }
   return config;
 });
 

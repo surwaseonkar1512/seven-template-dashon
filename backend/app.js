@@ -5,6 +5,10 @@ import morgan from "morgan";
 import { connectDB } from "./src/config/db.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import authRoutes from "./src/routes/authRoutes.js";
+import bannerRoutes from "./src/routes/HomePageRoutes/bannerRoutes.js"
+import homePageRoutes from "./src/routes/homePageRoutes.js"
+
+
 
 // Load environment variables
 dotenv.config();
@@ -24,6 +28,10 @@ app.use(morgan("dev"));
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/banners", bannerRoutes);
+app.use("/api/homepage", homePageRoutes);
+
+
 
 // Health check route
 app.get("/", (req, res) => {

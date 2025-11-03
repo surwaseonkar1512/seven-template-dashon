@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { passwordLogin, sendLoginOtp } from "../../Services/LoginServices";
+import { loginSuccess } from "../Redux/authSlice";
+import { useDispatch } from "react-redux";
 
 interface LoginPageProps {
   onLoginSuccess: () => void;
@@ -31,6 +33,8 @@ export function LoginPage({
   onSwitchToSignup,
   onSwitchToForgotPassword,
 }: LoginPageProps) {
+
+  const dispatch = useDispatch()
   // Password Login State
   const [passwordForm, setPasswordForm] = useState({
     email: "",
@@ -95,8 +99,7 @@ export function LoginPage({
       // Example expected structure: { success: true, token: "..." }
       if (response?.token) {
         toast.success("Login successful!");
-        localStorage.setItem("token", response.token);
-        onLoginSuccess();
+        dispatch(loginSuccess(response))
       } else {
         toast.error(response?.message || "Invalid credentials");
       }
@@ -307,11 +310,10 @@ export function LoginPage({
                         placeholder="you@example.com"
                         value={passwordForm.email}
                         onChange={handlePasswordChange}
-                        className={`pl-11 h-12 bg-gray-50/50 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${
-                          passwordErrors.email
-                            ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                            : ""
-                        }`}
+                        className={`pl-11 h-12 bg-gray-50/50 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${passwordErrors.email
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
+                          }`}
                       />
                     </div>
                     {passwordErrors.email && (
@@ -336,11 +338,10 @@ export function LoginPage({
                         placeholder="••••••••"
                         value={passwordForm.password}
                         onChange={handlePasswordChange}
-                        className={`pl-11 pr-11 h-12 bg-gray-50/50 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${
-                          passwordErrors.password
-                            ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                            : ""
-                        }`}
+                        className={`pl-11 pr-11 h-12 bg-gray-50/50 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${passwordErrors.password
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
+                          }`}
                       />
                       <button
                         type="button"
@@ -411,11 +412,10 @@ export function LoginPage({
                         placeholder="you@example.com"
                         value={otpForm.email}
                         onChange={handleOtpChange}
-                        className={`pl-11 h-12 bg-gray-50/50 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${
-                          otpErrors.email
-                            ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
-                            : ""
-                        }`}
+                        className={`pl-11 h-12 bg-gray-50/50 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all ${otpErrors.email
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500/20"
+                          : ""
+                          }`}
                       />
                     </div>
                     {otpErrors.email && (
@@ -471,17 +471,7 @@ export function LoginPage({
             </div> */}
           </div>
 
-          {/* Footer */}
-          <p className="text-center text-sm text-gray-500">
-            By continuing, you agree to our{" "}
-            <a href="#" className="text-blue-600 hover:underline">
-              Terms of Service
-            </a>{" "}
-            and{" "}
-            <a href="#" className="text-blue-600 hover:underline">
-              Privacy Policy
-            </a>
-          </p>
+
         </div>
       </div>
 

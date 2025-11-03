@@ -36,6 +36,13 @@ router.put(
   upload.single("avatar"),
   userController.updateUser
 );
+
+router.post(
+  "/toggleUserActive/:id",
+  authMiddleware,
+  adminMiddleware,
+  userController.toggleUserActive
+);
 router.delete(
   "/:id",
   authMiddleware,

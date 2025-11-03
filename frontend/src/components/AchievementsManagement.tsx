@@ -9,12 +9,12 @@ import { Badge } from './ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import { Separator } from './ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { 
-  Eye, 
-  Edit, 
-  Trash2, 
-  Plus, 
-  Save, 
+import {
+  Eye,
+  Edit,
+  Trash2,
+  Plus,
+  Save,
   GripVertical,
   Trophy,
   Award,
@@ -28,7 +28,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TemplatePreview } from './TemplatePreview';
@@ -96,19 +96,19 @@ function DraggableAchievementSection({
       transition={{ duration: 0.3, delay: index * 0.05 }}
       className={`
         group relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 transform
-        ${isSelected 
-          ? 'shadow-xl shadow-blue-500/25 scale-105 z-10' 
+        ${isSelected
+          ? 'shadow-xl shadow-blue-500/25 scale-105 z-10'
           : 'hover:shadow-lg hover:scale-102'
         }
         ${isDragging ? 'rotate-2' : ''}
       `}
       onClick={() => onSelect(section.id)}
       style={{
-        background: isSelected 
+        background: isSelected
           ? `linear-gradient(135deg, ${section.color}, ${section.color}dd)`
           : 'white',
-        border: isSelected 
-          ? `2px solid ${section.color}` 
+        border: isSelected
+          ? `2px solid ${section.color}`
           : '2px solid #f3f4f6'
       }}
     >
@@ -116,25 +116,22 @@ function DraggableAchievementSection({
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
-              <GripVertical 
-                className={`h-4 w-4 opacity-60 cursor-grab active:cursor-grabbing ${
-                  isSelected ? 'text-white' : 'text-gray-400'
-                }`} 
+              <GripVertical
+                className={`h-4 w-4 opacity-60 cursor-grab active:cursor-grabbing ${isSelected ? 'text-white' : 'text-gray-400'
+                  }`}
               />
-              <div 
-                className={`p-2 rounded-xl transition-all duration-300 ${
-                  isSelected 
-                    ? 'bg-white/20' 
-                    : 'bg-gray-100 group-hover:scale-110'
-                }`}
+              <div
+                className={`p-2 rounded-xl transition-all duration-300 ${isSelected
+                  ? 'bg-white/20'
+                  : 'bg-gray-100 group-hover:scale-110'
+                  }`}
                 style={{
                   backgroundColor: !isSelected ? section.bgColor : undefined
                 }}
               >
-                <Icon 
-                  className={`h-5 w-5 ${
-                    isSelected ? 'text-white' : 'text-gray-700'
-                  }`}
+                <Icon
+                  className={`h-5 w-5 ${isSelected ? 'text-white' : 'text-gray-700'
+                    }`}
                   style={{
                     color: !isSelected ? section.color : undefined
                   }}
@@ -142,19 +139,17 @@ function DraggableAchievementSection({
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <p className={`font-semibold truncate transition-colors duration-300 ${
-                isSelected ? 'text-white' : 'text-gray-900'
-              }`}>
+              <p className={`font-semibold truncate transition-colors duration-300 ${isSelected ? 'text-white' : 'text-gray-900'
+                }`}>
                 {section.name}
               </p>
-              <p className={`text-sm truncate transition-colors duration-300 ${
-                isSelected ? 'text-white/80' : 'text-gray-500'
-              }`}>
+              <p className={`text-sm truncate transition-colors duration-300 ${isSelected ? 'text-white/80' : 'text-gray-500'
+                }`}>
                 {section.items.length} item{section.items.length !== 1 ? 's' : ''}
               </p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <Switch
               checked={section.enabled}
@@ -166,31 +161,28 @@ function DraggableAchievementSection({
               `}
             />
             {!section.enabled && (
-              <Badge 
-                variant="secondary" 
-                className={`text-xs transition-colors duration-300 ${
-                  isSelected 
-                    ? 'bg-white/20 text-white' 
-                    : 'bg-red-100 text-red-800'
-                }`}
+              <Badge
+                variant="secondary"
+                className={`text-xs transition-colors duration-300 ${isSelected
+                  ? 'bg-white/20 text-white'
+                  : 'bg-red-100 text-red-800'
+                  }`}
               >
                 Hidden
               </Badge>
             )}
           </div>
         </div>
-        
-        <p className={`text-xs truncate transition-colors duration-300 ${
-          isSelected ? 'text-white/70' : 'text-gray-400'
-        }`}>
+
+        <p className={`text-xs truncate transition-colors duration-300 ${isSelected ? 'text-white/70' : 'text-gray-400'
+          }`}>
           {section.description}
         </p>
       </div>
-      
+
       {/* Animated background pattern */}
-      <div className={`absolute inset-0 opacity-10 transition-opacity duration-300 ${
-        isSelected ? 'opacity-20' : 'opacity-0'
-      }`}>
+      <div className={`absolute inset-0 opacity-10 transition-opacity duration-300 ${isSelected ? 'opacity-20' : 'opacity-0'
+        }`}>
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
       </div>
     </motion.div>
@@ -394,7 +386,7 @@ export function AchievementsManagement() {
   const currentSection = sections.find(s => s.id === selectedSection);
 
   const handleSectionToggle = useCallback((sectionId: string, enabled: boolean) => {
-    setSections(prev => prev.map(section => 
+    setSections(prev => prev.map(section =>
       section.id === sectionId ? { ...section, enabled } : section
     ));
     const section = sections.find(s => s.id === sectionId);
@@ -407,7 +399,7 @@ export function AchievementsManagement() {
       const draggedSection = newSections[dragIndex];
       newSections.splice(dragIndex, 1);
       newSections.splice(hoverIndex, 0, draggedSection);
-      
+
       // Update order numbers
       return newSections.map((section, index) => ({
         ...section,
@@ -421,8 +413,8 @@ export function AchievementsManagement() {
     if (!section) return;
 
     const newItem = createEmptyItem(section.type);
-    setSections(prev => prev.map(s => 
-      s.id === sectionId 
+    setSections(prev => prev.map(s =>
+      s.id === sectionId
         ? { ...s, items: [...s.items, newItem] }
         : s
     ));
@@ -430,8 +422,8 @@ export function AchievementsManagement() {
   };
 
   const handleDeleteItem = (sectionId: string, itemId: string) => {
-    setSections(prev => prev.map(section => 
-      section.id === sectionId 
+    setSections(prev => prev.map(section =>
+      section.id === sectionId
         ? { ...section, items: section.items.filter(item => item.id !== itemId) }
         : section
     ));
@@ -439,14 +431,14 @@ export function AchievementsManagement() {
   };
 
   const handleSaveItem = (sectionId: string, updatedItem: AchievementItem) => {
-    setSections(prev => prev.map(section => 
-      section.id === sectionId 
-        ? { 
-            ...section, 
-            items: section.items.map(item => 
-              item.id === updatedItem.id ? updatedItem : item
-            )
-          }
+    setSections(prev => prev.map(section =>
+      section.id === sectionId
+        ? {
+          ...section,
+          items: section.items.map(item =>
+            item.id === updatedItem.id ? updatedItem : item
+          )
+        }
         : section
     ));
     setEditingItem(null);
@@ -455,7 +447,7 @@ export function AchievementsManagement() {
 
   const createEmptyItem = (type: AchievementSection['type']): AchievementItem => {
     const id = `item_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+
     switch (type) {
       case 'hero':
         return {
@@ -683,16 +675,15 @@ export function AchievementsManagement() {
                 <p className="text-sm text-gray-300">Manage achievement sections</p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-3">
               <Button
                 variant={isPreviewMode ? "outline" : "default"}
                 size="sm"
-                className={`flex-1 transition-all duration-300 ${
-                  !isPreviewMode 
-                    ? 'bg-white text-gray-900 hover:bg-gray-100' 
-                    : 'border-gray-600 text-gray-300 hover:bg-gray-700'
-                }`}
+                className={`flex-1 transition-all duration-300 ${!isPreviewMode
+                  ? 'bg-white text-gray-900 hover:bg-gray-100'
+                  : 'border-gray-600 text-gray-300 hover:bg-gray-700'
+                  }`}
                 onClick={() => setIsPreviewMode(false)}
               >
                 <Edit className="h-4 w-4 mr-2" />
@@ -701,11 +692,10 @@ export function AchievementsManagement() {
               <Button
                 variant={isPreviewMode ? "default" : "outline"}
                 size="sm"
-                className={`flex-1 transition-all duration-300 ${
-                  isPreviewMode 
-                    ? 'bg-white text-gray-900 hover:bg-gray-100' 
-                    : 'border-gray-600 text-gray-300 hover:bg-gray-700'
-                }`}
+                className={`flex-1 transition-all duration-300 ${isPreviewMode
+                  ? 'bg-white text-gray-900 hover:bg-gray-100'
+                  : 'border-gray-600 text-gray-300 hover:bg-gray-700'
+                  }`}
                 onClick={() => setIsPreviewMode(true)}
               >
                 <Eye className="h-4 w-4 mr-2" />
@@ -736,9 +726,9 @@ export function AchievementsManagement() {
         {/* Enhanced Main Content - Optimized for 1200px */}
         <div className="flex-1 flex flex-col min-w-0">
           {isPreviewMode ? (
-            <TemplatePreview 
-              type="achievements" 
-              sections={sections.filter(s => s.enabled)} 
+            <TemplatePreview
+              type="achievements"
+              sections={sections.filter(s => s.enabled)}
               title="Achievement Year Preview"
             />
           ) : currentSection && (
@@ -747,7 +737,7 @@ export function AchievementsManagement() {
               <div className="p-6 xl:p-8 border-b border-gray-200 bg-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4 xl:space-x-6">
-                    <div 
+                    <div
                       className="w-12 h-12 xl:w-16 xl:h-16 rounded-2xl flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105"
                       style={{
                         background: `linear-gradient(135deg, ${currentSection.color}, ${currentSection.color}dd)`
@@ -759,13 +749,12 @@ export function AchievementsManagement() {
                       <h3 className="text-xl xl:text-2xl font-bold text-gray-900 mb-1">{currentSection.name}</h3>
                       <p className="text-gray-600 text-sm xl:text-base">{currentSection.description}</p>
                       <div className="flex items-center space-x-4 mt-2">
-                        <Badge 
+                        <Badge
                           variant={currentSection.enabled ? "default" : "secondary"}
-                          className={`transition-all duration-300 ${
-                            currentSection.enabled 
-                              ? 'bg-green-100 text-green-800 hover:bg-green-200' 
-                              : 'bg-red-100 text-red-800'
-                          }`}
+                          className={`transition-all duration-300 ${currentSection.enabled
+                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                            : 'bg-red-100 text-red-800'
+                            }`}
                         >
                           {currentSection.enabled ? 'Active' : 'Inactive'}
                         </Badge>
@@ -775,7 +764,7 @@ export function AchievementsManagement() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <Button
                     onClick={() => handleAddItem(currentSection.id)}
                     className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
@@ -791,11 +780,11 @@ export function AchievementsManagement() {
                 {currentSection.items.length === 0 ? (
                   <div className="flex items-center justify-center h-64">
                     <div className="text-center">
-                      <div 
+                      <div
                         className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center"
                         style={{ backgroundColor: currentSection.bgColor }}
                       >
-                        <currentSection.icon 
+                        <currentSection.icon
                           className="h-8 w-8"
                           style={{ color: currentSection.color }}
                         />
@@ -825,11 +814,11 @@ export function AchievementsManagement() {
                         >
                           <Card className="group relative overflow-hidden border-2 border-gray-100 hover:border-gray-200 transition-all duration-300 hover:shadow-xl transform hover:scale-105 bg-white">
                             {/* Top colored bar */}
-                            <div 
+                            <div
                               className="h-1 w-full"
                               style={{ backgroundColor: currentSection.color }}
                             ></div>
-                            
+
                             <CardHeader className="pb-4">
                               <div className="flex items-start justify-between">
                                 <div className="flex-1 min-w-0">
@@ -840,7 +829,7 @@ export function AchievementsManagement() {
                                     {currentSection.type.charAt(0).toUpperCase() + currentSection.type.slice(1)} Item
                                   </CardDescription>
                                 </div>
-                                
+
                                 <div className="flex items-center space-x-3 ml-4">
                                   <Dialog>
                                     <DialogTrigger asChild>
@@ -855,12 +844,12 @@ export function AchievementsManagement() {
                                     <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-2">
                                       <DialogHeader className="border-b border-gray-100 pb-4">
                                         <div className="flex items-center space-x-3">
-                                          <div 
+                                          <div
                                             className="w-10 h-10 rounded-xl flex items-center justify-center"
                                             style={{ backgroundColor: currentSection.bgColor }}
                                           >
-                                            <currentSection.icon 
-                                              className="h-5 w-5" 
+                                            <currentSection.icon
+                                              className="h-5 w-5"
                                               style={{ color: currentSection.color }}
                                             />
                                           </div>
@@ -879,7 +868,7 @@ export function AchievementsManagement() {
                                       </div>
                                     </DialogContent>
                                   </Dialog>
-                                  
+
                                   <Button
                                     variant="outline"
                                     size="icon"
@@ -891,13 +880,13 @@ export function AchievementsManagement() {
                                 </div>
                               </div>
                             </CardHeader>
-                            
+
                             <CardContent className="pt-0">
                               <div className="bg-gray-50 rounded-xl p-3 xl:p-4 border-2 border-gray-100 group-hover:border-gray-200 transition-all duration-300">
                                 {renderItemPreview(item, currentSection.type)}
                               </div>
                             </CardContent>
-                            
+
                             {/* Hover overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-white/0 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                           </Card>
@@ -927,7 +916,7 @@ function HeroAchievementForm({ item, onSave }: { item: AchievementItem; onSave: 
           <Input
             id="title"
             value={formData.title || ''}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             placeholder="Achievements 2024"
           />
         </div>
@@ -936,30 +925,30 @@ function HeroAchievementForm({ item, onSave }: { item: AchievementItem; onSave: 
           <Input
             id="subtitle"
             value={formData.subtitle || ''}
-            onChange={(e) => setFormData({...formData, subtitle: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
             placeholder="A Year of Excellence"
           />
         </div>
       </div>
-      
+
       <div>
         <Label htmlFor="description">Description</Label>
         <Textarea
           id="description"
           value={formData.description || ''}
-          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Describe the achievements overview..."
           rows={3}
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="yearHighlight">Year Highlight</Label>
           <Input
             id="yearHighlight"
             value={formData.yearHighlight || ''}
-            onChange={(e) => setFormData({...formData, yearHighlight: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, yearHighlight: e.target.value })}
             placeholder="2024"
           />
         </div>
@@ -968,14 +957,14 @@ function HeroAchievementForm({ item, onSave }: { item: AchievementItem; onSave: 
           <Input
             id="backgroundImage"
             value={formData.backgroundImage || ''}
-            onChange={(e) => setFormData({...formData, backgroundImage: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, backgroundImage: e.target.value })}
             placeholder="Enter image URL"
           />
         </div>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -998,7 +987,7 @@ function RankersForm({ item, onSave }: { item: AchievementItem; onSave: (item: A
           <Input
             id="name"
             value={formData.name || ''}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Student name"
           />
         </div>
@@ -1007,19 +996,19 @@ function RankersForm({ item, onSave }: { item: AchievementItem; onSave: (item: A
           <Input
             id="rank"
             value={formData.rank || ''}
-            onChange={(e) => setFormData({...formData, rank: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, rank: e.target.value })}
             placeholder="1"
           />
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="exam">Exam</Label>
           <Input
             id="exam"
             value={formData.exam || ''}
-            onChange={(e) => setFormData({...formData, exam: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, exam: e.target.value })}
             placeholder="JEE Advanced"
           />
         </div>
@@ -1028,19 +1017,19 @@ function RankersForm({ item, onSave }: { item: AchievementItem; onSave: (item: A
           <Input
             id="score"
             value={formData.score || ''}
-            onChange={(e) => setFormData({...formData, score: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, score: e.target.value })}
             placeholder="350/360"
           />
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="achievement">Achievement</Label>
           <Input
             id="achievement"
             value={formData.achievement || ''}
-            onChange={(e) => setFormData({...formData, achievement: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, achievement: e.target.value })}
             placeholder="AIR 1"
           />
         </div>
@@ -1049,14 +1038,14 @@ function RankersForm({ item, onSave }: { item: AchievementItem; onSave: (item: A
           <Input
             id="photo"
             value={formData.photo || ''}
-            onChange={(e) => setFormData({...formData, photo: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
             placeholder="Enter photo URL"
           />
         </div>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -1079,7 +1068,7 @@ function PlacementsForm({ item, onSave }: { item: AchievementItem; onSave: (item
           <Input
             id="studentName"
             value={formData.studentName || ''}
-            onChange={(e) => setFormData({...formData, studentName: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, studentName: e.target.value })}
             placeholder="Student name"
           />
         </div>
@@ -1088,19 +1077,19 @@ function PlacementsForm({ item, onSave }: { item: AchievementItem; onSave: (item
           <Input
             id="college"
             value={formData.college || ''}
-            onChange={(e) => setFormData({...formData, college: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, college: e.target.value })}
             placeholder="IIT Bombay"
           />
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="branch">Branch</Label>
           <Input
             id="branch"
             value={formData.branch || ''}
-            onChange={(e) => setFormData({...formData, branch: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
             placeholder="Computer Science"
           />
         </div>
@@ -1109,24 +1098,24 @@ function PlacementsForm({ item, onSave }: { item: AchievementItem; onSave: (item
           <Input
             id="rank"
             value={formData.rank || ''}
-            onChange={(e) => setFormData({...formData, rank: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, rank: e.target.value })}
             placeholder="AIR 15"
           />
         </div>
       </div>
-      
+
       <div>
         <Label htmlFor="photo">Photo URL</Label>
         <Input
           id="photo"
           value={formData.photo || ''}
-          onChange={(e) => setFormData({...formData, photo: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
           placeholder="Enter photo URL"
         />
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -1148,18 +1137,18 @@ function AwardsForm({ item, onSave }: { item: AchievementItem; onSave: (item: Ac
         <Input
           id="title"
           value={formData.title || ''}
-          onChange={(e) => setFormData({...formData, title: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="Best Coaching Institute 2024"
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="organization">Organization</Label>
           <Input
             id="organization"
             value={formData.organization || ''}
-            onChange={(e) => setFormData({...formData, organization: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
             placeholder="Education Excellence Awards"
           />
         </div>
@@ -1168,35 +1157,35 @@ function AwardsForm({ item, onSave }: { item: AchievementItem; onSave: (item: Ac
           <Input
             id="date"
             value={formData.date || ''}
-            onChange={(e) => setFormData({...formData, date: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
             placeholder="2024"
           />
         </div>
       </div>
-      
+
       <div>
         <Label htmlFor="description">Description</Label>
         <Textarea
           id="description"
           value={formData.description || ''}
-          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Award description"
           rows={3}
         />
       </div>
-      
+
       <div>
         <Label htmlFor="image">Image URL</Label>
         <Input
           id="image"
           value={formData.image || ''}
-          onChange={(e) => setFormData({...formData, image: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, image: e.target.value })}
           placeholder="Enter image URL"
         />
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -1218,18 +1207,18 @@ function GalleryForm({ item, onSave }: { item: AchievementItem; onSave: (item: A
         <Input
           id="url"
           value={formData.url || ''}
-          onChange={(e) => setFormData({...formData, url: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, url: e.target.value })}
           placeholder="Enter image URL"
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="caption">Caption</Label>
           <Input
             id="caption"
             value={formData.caption || ''}
-            onChange={(e) => setFormData({...formData, caption: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, caption: e.target.value })}
             placeholder="Rank 1 Celebration"
           />
         </div>
@@ -1238,14 +1227,14 @@ function GalleryForm({ item, onSave }: { item: AchievementItem; onSave: (item: A
           <Input
             id="event"
             value={formData.event || ''}
-            onChange={(e) => setFormData({...formData, event: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, event: e.target.value })}
             placeholder="JEE Results 2024"
           />
         </div>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -1268,7 +1257,7 @@ function TestimonialsAchievementForm({ item, onSave }: { item: AchievementItem; 
           <Input
             id="name"
             value={formData.name || ''}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Student name"
           />
         </div>
@@ -1277,30 +1266,30 @@ function TestimonialsAchievementForm({ item, onSave }: { item: AchievementItem; 
           <Input
             id="achievement"
             value={formData.achievement || ''}
-            onChange={(e) => setFormData({...formData, achievement: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, achievement: e.target.value })}
             placeholder="JEE Advanced AIR 5"
           />
         </div>
       </div>
-      
+
       <div>
         <Label htmlFor="quote">Quote</Label>
         <Textarea
           id="quote"
           value={formData.quote || ''}
-          onChange={(e) => setFormData({...formData, quote: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, quote: e.target.value })}
           placeholder="Student testimonial"
           rows={3}
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="photo">Photo URL</Label>
           <Input
             id="photo"
             value={formData.photo || ''}
-            onChange={(e) => setFormData({...formData, photo: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
             placeholder="Enter photo URL"
           />
         </div>
@@ -1309,14 +1298,14 @@ function TestimonialsAchievementForm({ item, onSave }: { item: AchievementItem; 
           <Input
             id="batch"
             value={formData.batch || ''}
-            onChange={(e) => setFormData({...formData, batch: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, batch: e.target.value })}
             placeholder="2024"
           />
         </div>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -1339,7 +1328,7 @@ function StatsForm({ item, onSave }: { item: AchievementItem; onSave: (item: Ach
           <Input
             id="label"
             value={formData.label || ''}
-            onChange={(e) => setFormData({...formData, label: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, label: e.target.value })}
             placeholder="Students Qualified"
           />
         </div>
@@ -1348,19 +1337,19 @@ function StatsForm({ item, onSave }: { item: AchievementItem; onSave: (item: Ach
           <Input
             id="value"
             value={formData.value || ''}
-            onChange={(e) => setFormData({...formData, value: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, value: e.target.value })}
             placeholder="1,250"
           />
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="percentage">Percentage</Label>
           <Input
             id="percentage"
             value={formData.percentage || ''}
-            onChange={(e) => setFormData({...formData, percentage: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, percentage: e.target.value })}
             placeholder="95%"
           />
         </div>
@@ -1369,14 +1358,14 @@ function StatsForm({ item, onSave }: { item: AchievementItem; onSave: (item: Ach
           <Input
             id="comparison"
             value={formData.comparison || ''}
-            onChange={(e) => setFormData({...formData, comparison: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, comparison: e.target.value })}
             placeholder="+15% from last year"
           />
         </div>
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -1399,7 +1388,7 @@ function FacultyAchievementForm({ item, onSave }: { item: AchievementItem; onSav
           <Input
             id="name"
             value={formData.name || ''}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Dr. Rajesh Gupta"
           />
         </div>
@@ -1408,19 +1397,19 @@ function FacultyAchievementForm({ item, onSave }: { item: AchievementItem; onSav
           <Input
             id="subject"
             value={formData.subject || ''}
-            onChange={(e) => setFormData({...formData, subject: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
             placeholder="Physics"
           />
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="achievement">Achievement</Label>
           <Input
             id="achievement"
             value={formData.achievement || ''}
-            onChange={(e) => setFormData({...formData, achievement: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, achievement: e.target.value })}
             placeholder="Best Faculty Award 2024"
           />
         </div>
@@ -1429,24 +1418,24 @@ function FacultyAchievementForm({ item, onSave }: { item: AchievementItem; onSav
           <Input
             id="experience"
             value={formData.experience || ''}
-            onChange={(e) => setFormData({...formData, experience: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
             placeholder="15 years"
           />
         </div>
       </div>
-      
+
       <div>
         <Label htmlFor="photo">Photo URL</Label>
         <Input
           id="photo"
           value={formData.photo || ''}
-          onChange={(e) => setFormData({...formData, photo: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
           placeholder="Enter photo URL"
         />
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>
@@ -1468,35 +1457,35 @@ function GoalsForm({ item, onSave }: { item: AchievementItem; onSave: (item: Ach
         <Input
           id="title"
           value={formData.title || ''}
-          onChange={(e) => setFormData({...formData, title: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder="Expand to 5 New Cities"
         />
       </div>
-      
+
       <div>
         <Label htmlFor="description">Description</Label>
         <Textarea
           id="description"
           value={formData.description || ''}
-          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           placeholder="Goal description"
           rows={3}
         />
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="targetDate">Target Date</Label>
           <Input
             id="targetDate"
             value={formData.targetDate || ''}
-            onChange={(e) => setFormData({...formData, targetDate: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
             placeholder="2025"
           />
         </div>
         <div>
           <Label htmlFor="status">Status</Label>
-          <Select value={formData.status || 'planning'} onValueChange={(value) => setFormData({...formData, status: value})}>
+          <Select value={formData.status || 'planning'} onValueChange={(value) => setFormData({ ...formData, status: value })}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -1510,7 +1499,7 @@ function GoalsForm({ item, onSave }: { item: AchievementItem; onSave: (item: Ach
       </div>
 
       <div className="flex justify-end space-x-3 pt-4 border-t">
-        <Button variant="outline" onClick={() => {}}>
+        <Button variant="outline" onClick={() => { }}>
           Cancel
         </Button>
         <Button onClick={() => onSave(formData)}>

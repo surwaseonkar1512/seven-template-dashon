@@ -11,14 +11,40 @@ const UserSchema = new mongoose.Schema(
       trim: true,
     },
     mobile: { type: String, trim: true },
-    password: { type: String }, // hashed
+    password: { type: String },
     role: { type: String, enum: ["admin", "user"], default: "user" },
-    avatar: { type: String }, // Cloudinary URL
-    avatarPublicId: { type: String }, // used for deletion
+    avatar: { type: String },
+    avatarPublicId: { type: String },
     domainUrl: { type: String, trim: true },
-    isVerified: { type: Boolean, default: false },
-    otp: { type: String }, // hashed otp
+    isActive: { type: Boolean, default: false },
+    otp: { type: String },
     otpExpiry: { type: Date },
+
+    // 🔹 Reference to homepage content (single document)
+    homePage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "HomePage",
+    },
+
+    // 🔹 Reference to About Us page (single document)
+    aboutUs: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "AboutUsPage",
+    },
+
+    // 🔹 Reference to Contact Us page (single document)
+    contactUs: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ContactUsPage",
+    },
+
+    // 🔹 Reference to multiple Achievement Categories (each with many achievements)
+    achievementPages: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "AchievementCategory",
+      },
+    ],
   },
   { timestamps: true }
 );

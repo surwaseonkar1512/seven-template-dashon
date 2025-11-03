@@ -3,12 +3,12 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './ui/tooltip';
-import { 
-  LayoutDashboard, 
-  Users, 
-  LayoutTemplate, 
-  Settings, 
-  Bell, 
+import {
+  LayoutDashboard,
+  Users,
+  LayoutTemplate,
+  Settings,
+  Bell,
   User,
   Palette,
   Globe,
@@ -27,7 +27,7 @@ import {
 interface SidebarProps {
   currentView: string;
   onViewChange: (view: string) => void;
-  mode: 'admin' | 'user';
+  mode: any;
   onLogout?: () => void;
 }
 
@@ -49,16 +49,11 @@ export function Sidebar({ currentView, onViewChange, mode, onLogout }: SidebarPr
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const adminMenuGroups: MenuGroup[] = [
-    {
-      title: 'Overview',
-      items: [
-        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      ]
-    },
+
     {
       title: 'User Management',
       items: [
-        { id: 'users', label: 'All Users', icon: Users, badge: '23', badgeVariant: 'secondary' },
+        { id: 'users', label: 'All Users', icon: Users, badgeVariant: 'secondary' },
         { id: 'create-user', label: 'Create User', icon: UserPlus },
       ]
     },
@@ -84,12 +79,7 @@ export function Sidebar({ currentView, onViewChange, mode, onLogout }: SidebarPr
   ];
 
   const userMenuGroups: MenuGroup[] = [
-    {
-      title: 'Overview',
-      items: [
-        { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-      ]
-    },
+
     {
       title: 'Website',
       items: [
@@ -98,10 +88,13 @@ export function Sidebar({ currentView, onViewChange, mode, onLogout }: SidebarPr
       ]
     },
     {
-      title: 'Content',
+      title: 'Content Management',
       items: [
-        { id: 'about-us', label: 'About Us Page', icon: Info },
-        { id: 'contact-us', label: 'Contact Us Page', icon: Phone },
+        { id: 'templates', label: 'Templates', icon: LayoutTemplate },
+        { id: 'template-preview', label: 'Preview', icon: Eye },
+        { id: 'sections', label: 'Homepage Sections', icon: Globe },
+        { id: 'about-us', label: 'About Us', icon: Info },
+        { id: 'contact-us', label: 'Contact Us', icon: Phone },
         { id: 'achievements', label: 'Achievements', icon: Trophy },
       ]
     },
@@ -145,15 +138,15 @@ export function Sidebar({ currentView, onViewChange, mode, onLogout }: SidebarPr
         {isActive && !collapsed && (
           <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-primary rounded-r-full" />
         )}
-        
+
         <Icon className={`h-4 w-4 flex-shrink-0 ${collapsed ? '' : 'mr-3'} transition-transform duration-200 ${isHovered && !isActive ? 'scale-110' : ''}`} />
-        
+
         {!collapsed && (
           <>
             <span className="flex-1 text-left truncate">{item.label}</span>
             {item.badge && (
-              <Badge 
-                variant={item.badgeVariant || 'secondary'} 
+              <Badge
+                variant={item.badgeVariant || 'secondary'}
                 className="ml-auto text-xs px-1.5 py-0.5 h-5"
               >
                 {item.badge}

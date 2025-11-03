@@ -54,7 +54,7 @@ exports.signup = async (req, res) => {
       mobile,
       password: hashedPassword,
       domainUrl,
-      isVerified: false,
+      isActive: false,
       role: "user",
     });
 
@@ -151,7 +151,7 @@ exports.passwordLogin = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ message: "Invalid credentials" });
 
-    if (!user.isVerified) {
+    if (!user.isActive) {
       // Optionally: block login for unverified users
       return res
         .status(403)
@@ -221,7 +221,7 @@ exports.verifyLoginOtp = async (req, res) => {
     await user.save();
 
     const token = signToken(user);
-    return res.json({ token });
+    return res.json({ token, user });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
@@ -319,7 +319,7 @@ exports.adminCreateUser = async (req, res) => {
       role,
       mobile,
       domainUrl,
-      isVerified: true, // admin created -> verified
+      isActive: true,
     });
 
     if (req.file) {

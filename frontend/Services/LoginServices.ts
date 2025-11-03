@@ -29,7 +29,6 @@ export const passwordLogin = async (email: string, password: string) => {
   try {
     const res = await apiClient.post("/auth/login", { email, password });
     // Store token if available
-    if (res.data.token) localStorage.setItem("token", res.data.token);
     return res.data;
   } catch (error) {
     console.error("Error during password login:", error);
@@ -52,7 +51,6 @@ export const sendLoginOtp = async (email: string) => {
 export const verifyLoginOtp = async (email: string, otp: any) => {
   try {
     const res = await apiClient.post("/auth/verify-login-otp", { email, otp });
-    if (res.data.token) localStorage.setItem("token", res.data.token);
     return res.data;
   } catch (error) {
     console.error("Error verifying login OTP:", error);

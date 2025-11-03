@@ -92,8 +92,29 @@ exports.deleteUser = async (req, res) => {
       }
     }
 
-    await user.remove();
-    res.json({ message: "User deleted" });
+    // ✅ Updated line
+    await User.deleteOne({ _id: targetId });
+
+    res.json({ message: "User deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.toggleUserActive = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.isActive = !user.isActive;
+    await user.save();
+
+    res.json({
+      message: `User ${user.isActive ? "activated" : "deactivated"} successfully`,
+      user,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });

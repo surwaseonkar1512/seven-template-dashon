@@ -11,6 +11,8 @@ import { Input } from "./ui/input";
 import { Mail, Clock, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { verifyLoginOtp } from "../../Services/LoginServices";
+import { loginSuccess } from "../Redux/authSlice";
+import { useDispatch } from "react-redux";
 
 interface OTPVerificationModalProps {
   open: boolean;
@@ -29,6 +31,7 @@ export function OTPVerificationModal({
   onResend,
   purpose = "signup",
 }: OTPVerificationModalProps) {
+  const dispatch = useDispatch()
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(60);
   const [canResend, setCanResend] = useState(false);
@@ -105,7 +108,9 @@ export function OTPVerificationModal({
 
     setIsVerifying(true);
     try {
-      await verifyLoginOtp(email, otpString);
+      const response = await verifyLoginOtp(email, otpString);
+      dispatch(loginSuccess(response))
+
       toast.success("OTP verified successfully!");
     } catch (error) {
       toast.error("Invalid OTP. Please try again.");

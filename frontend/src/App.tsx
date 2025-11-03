@@ -1,22 +1,34 @@
-// App.tsx
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import { Toaster } from "sonner";
-import Dashboard from "./pages/Dashboard";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import { publicRoutes, authProtectedRoutes } from "./Routes/Route";
+import PrivateRoute from "./Routes/PrivateRoute";
+import PublicRoute from "./Routes/PublicRoute";
+import store from "./Redux/store";
 
-type Props = {};
-
-const App = (props: Props) => {
+const App = () => {
   return (
-    <Router>
-      <Toaster richColors position="top-right" />
+    <Provider store={store}>
+      <BrowserRouter>
+        <Routes>
+          {publicRoutes.map(({ path, component }, i) => (
+            <Route key={i} path={path} element={<PublicRoute>{component}</PublicRoute>} />
+          ))}
 
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </Router>
+          {authProtectedRoutes.map(({ path, component, children, allowedRoles }, i) => (
+            <Route
+              key={i}
+              path={path}
+              element={<PrivateRoute allowedRoles={allowedRoles}>{component}</PrivateRoute>}
+            >
+              {children?.map((child, j) => (
+                <Route key={j} path={child.path} element={child.element} />
+              ))}
+            </Route>
+          ))}
+        </Routes>
+      </BrowserRouter>
+    </Provider>
   );
 };
 
