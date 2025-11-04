@@ -68,6 +68,8 @@ export function Header({ title, mode, onLogout }: HeaderProps) {
     setSelectedUser(user);
     localStorage.setItem("selectedUserId", user._id);
     toast.success(`Switched to ${user.name}`);
+    window.location.reload();
+
     setOpen(false);
   };
 

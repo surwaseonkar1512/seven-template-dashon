@@ -7,6 +7,9 @@ import userRoutes from "./src/routes/userRoutes.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import bannerRoutes from "./src/routes/HomePageRoutes/bannerRoutes.js"
 import homePageRoutes from "./src/routes/homePageRoutes.js"
+import testimonialRoutes from "./src/routes/HomePageRoutes/testimonialRoutes.js"
+
+
 
 
 
@@ -30,6 +33,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/banners", bannerRoutes);
 app.use("/api/homepage", homePageRoutes);
+app.use("/api/testimonials", testimonialRoutes); // <-- register new testimonial routes
 
 
 

@@ -8,11 +8,11 @@ import { DashboardOverview } from '../components/DashboardOverview';
 import { UserManagement } from '../components/UserManagement';
 import { TemplateManagement } from '../components/TemplateManagement';
 import { TemplatePreviewTab } from '../components/TemplatePreviewTab';
-import { SectionManagement } from '../components/SectionManagement';
 import { AboutUsManagement } from '../components/AboutUsManagement';
 import { ContactUsManagement } from '../components/ContactUsManagement';
 import { AchievementsManagement } from '../components/AchievementsManagement';
 import { AdminCreateUser } from '../components/AdminCreateUser';
+import { HomePageManagement } from '../pages/HomePageMangment';
 
 
 
@@ -33,7 +33,7 @@ export const authProtectedRoutes = [
             { path: 'create-user', element: <AdminCreateUser /> },
             { path: 'templates', element: <TemplateManagement /> },
             { path: 'template-preview', element: <TemplatePreviewTab /> },
-            { path: 'sections', element: <SectionManagement /> },
+            { path: 'sections', element: <HomePageManagement /> },
             { path: 'about-us', element: <AboutUsManagement /> },
             { path: 'contact-us', element: <ContactUsManagement /> },
             { path: 'achievements', element: <AchievementsManagement /> },
